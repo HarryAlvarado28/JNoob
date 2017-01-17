@@ -19,8 +19,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-public class AgregarCliente extends JFrame implements ActionListener{
+public class AgregarCliente extends JFrame implements ActionListener, DocumentListener{
 
 	/**
 	 * 
@@ -44,8 +46,8 @@ public class AgregarCliente extends JFrame implements ActionListener{
 	private Dimension tamanoPantalla = mipantalla.getScreenSize();
 	private int alturaPantalla = tamanoPantalla.height, anchoPantalla = tamanoPantalla.width;
 	
-	private JLabel jlNombre, jlApellido, jlUsuario, jlNumCuenta, jlSaldoInicial, jlContrasena, jlTipoCuenta, jlMensaje;
-	private JTextField jtfNombre, jtfApellido, jtfUsuario, jtfNumCuenta, jtfSaldoInicial, jtfContrasena;
+	private JLabel jlNombre, jlApellido, jlUsuario, jlNumCuenta, jlSaldoInicial, jlContrasena, jlTipoCuenta, jlMensaje, jlContrasenaConfirma;
+	private JTextField jtfNombre, jtfApellido, jtfUsuario, jtfNumCuenta, jtfSaldoInicial, jtfContrasena, jtfContrasenaConfirma;
 	private JButton jbAdd, jbCancelar, jbCerrar;
 	private JPanel jpInformacion, jpDatos, jpBotones, jpBtMsj;	
 	private String nombre, apellido, usuario, contrasena, tipoCuenta;
@@ -64,8 +66,8 @@ public class AgregarCliente extends JFrame implements ActionListener{
 	}
 	
 	private void addInformacion(){
-		jpInformacion = new JPanel(new GridLayout(7,1));
-		jpDatos = new JPanel(new GridLayout(7,1,10,13));
+		jpInformacion = new JPanel(new GridLayout(8,1));
+		jpDatos = new JPanel(new GridLayout(8,1,10,13));
 		jpBotones = new JPanel();
 		jpBtMsj = new JPanel(new BorderLayout());
 		
@@ -85,6 +87,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		jlNumCuenta = new JLabel(" Numero de Cuenta: ");
 		jlSaldoInicial = new JLabel(" Saldo Inicial: ");
 		jlContrasena = new JLabel(" Contraseña: ");
+		jlContrasenaConfirma = new JLabel(" Confirmar Contr.");
 		jlTipoCuenta = new JLabel(" Tipo Cuenta: ");
 		
 		jtfNombre = new JTextField(15);
@@ -93,6 +96,8 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		jtfNumCuenta = new JTextField(15);
 		jtfSaldoInicial = new JTextField(12);
 		jtfContrasena = new JTextField(12);
+		jtfContrasenaConfirma = new JTextField(12);
+		jtfUsuario.getDocument().addDocumentListener(this);
 		
 		jtfNumCuenta.setText("Asignacion Automatica");
 		jtfNumCuenta.setHorizontalAlignment(JTextField.CENTER);
@@ -110,6 +115,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		jpInformacion.add(jlNumCuenta);
 		jpInformacion.add(jlSaldoInicial);
 		jpInformacion.add(jlContrasena);
+		jpInformacion.add(jlContrasenaConfirma);
 		jpInformacion.add(jlTipoCuenta);	
 			
 		jpDatos.add(jtfNombre);
@@ -118,6 +124,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		jpDatos.add(jtfNumCuenta);
 		jpDatos.add(jtfSaldoInicial);
 		jpDatos.add(jtfContrasena);
+		jpDatos.add(jtfContrasenaConfirma);
 		jpDatos.add(jcbTipoCuenta);
 		
 		jpBotones.add(jbAdd);
@@ -180,7 +187,60 @@ public class AgregarCliente extends JFrame implements ActionListener{
 //					"usuario: "+usuario+" y contraseña: "+contrasena;
 //			JOptionPane.showMessageDialog(this, indicacion);
 	}
+	
+	
+	public void changedUpdate(DocumentEvent d) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	public void insertUpdate(DocumentEvent d) {
+		// TODO Auto-generated method stub
+		if(d.getDocument() == jtfUsuario){
+			
+			String contrasena;
+			contrasena = jtfUsuario.getText();
+			if(contrasena.length() < 5 || contrasena.length() > 12){
+				jtfUsuario.setBackground(Color.RED);
+			}else{
+				jtfUsuario.setBackground(Color.GREEN);
+			}
+			
+		}else if(d.getDocument() == jtfContrasena){
+			String contrasena;
+			contrasena = jtfContrasena.getText();
+			if(contrasena.length() < 5 || contrasena.length() > 12){
+				jtfContrasena.setBackground(Color.RED);
+			}else{
+				jtfContrasena.setBackground(Color.GREEN);
+			}
+		}
+		
+	}
+
+	public void removeUpdate(DocumentEvent d) {
+		// TODO Auto-generated method stub
+		
+		if(d.getDocument() == jtfUsuario){
+			String contrasena;
+			contrasena = jtfUsuario.getText();
+			if(contrasena.length() < 5 || contrasena.length() > 12){
+				jtfUsuario.setBackground(Color.RED);
+			}else{
+				jtfUsuario.setBackground(Color.GREEN);
+			}
+		}else if(d.getDocument() == jtfContrasena){
+			String contrasena;
+			contrasena = jtfContrasena.getText();
+			if(contrasena.length() < 5 || contrasena.length() > 12){
+				jtfContrasena.setBackground(Color.RED);
+			}else{
+				jtfContrasena.setBackground(Color.GREEN);
+			}
+		}
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void agregandoClientes(String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
 			String contrasena, String tipoCuenta){
