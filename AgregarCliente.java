@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class AgregarCliente extends JFrame implements ActionListener, DocumentListener{
+public class AgregarCliente extends JFrame implements ActionListener{
 
 	/**
 	 * 
@@ -97,7 +97,11 @@ public class AgregarCliente extends JFrame implements ActionListener, DocumentLi
 		jtfSaldoInicial = new JTextField(12);
 		jtfContrasena = new JTextField(12);
 		jtfContrasenaConfirma = new JTextField(12);
-		jtfUsuario.getDocument().addDocumentListener(this);
+		
+		jtfNombre.getDocument().addDocumentListener(new DocumentNombre());
+		jtfApellido.getDocument().addDocumentListener(new DocumentApellido());
+		jtfContrasena.getDocument().addDocumentListener(new DocumentContrasena());	
+		jtfContrasenaConfirma.getDocument().addDocumentListener(new DocumentContraConfirmar());
 		
 		jtfNumCuenta.setText("Asignacion Automatica");
 		jtfNumCuenta.setHorizontalAlignment(JTextField.CENTER);
@@ -109,6 +113,8 @@ public class AgregarCliente extends JFrame implements ActionListener, DocumentLi
 			jcbTipoCuenta.addItem("Ahorro");
 			jcbTipoCuenta.addItem("Corriente");
 		//---------------------------------------------	
+			
+		
 		jpInformacion.add(jlNombre);
 		jpInformacion.add(jlApellido);
 		jpInformacion.add(jlUsuario);
@@ -149,7 +155,7 @@ public class AgregarCliente extends JFrame implements ActionListener, DocumentLi
 				apellido = jtfApellido.getText();
 				usuario = jtfUsuario.getText();
 				
-				contrasena = jtfContrasena.getText();
+				apellido = jtfContrasena.getText();
 				tipoCuenta = (String)jcbTipoCuenta.getSelectedItem();	
 				
 				//------------------Datos int y double---------------------
@@ -186,60 +192,8 @@ public class AgregarCliente extends JFrame implements ActionListener, DocumentLi
 //					" pose un Saldo Inicial de B/. "+saldoInicial+"\n con las Credenciales de acceso "+
 //					"usuario: "+usuario+" y contraseña: "+contrasena;
 //			JOptionPane.showMessageDialog(this, indicacion);
-	}
+	}	
 	
-	
-	public void changedUpdate(DocumentEvent d) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void insertUpdate(DocumentEvent d) {
-		// TODO Auto-generated method stub
-		if(d.getDocument() == jtfUsuario){
-			
-			String contrasena;
-			contrasena = jtfUsuario.getText();
-			if(contrasena.length() < 5 || contrasena.length() > 12){
-				jtfUsuario.setBackground(Color.RED);
-			}else{
-				jtfUsuario.setBackground(Color.GREEN);
-			}
-			
-		}else if(d.getDocument() == jtfContrasena){
-			String contrasena;
-			contrasena = jtfContrasena.getText();
-			if(contrasena.length() < 5 || contrasena.length() > 12){
-				jtfContrasena.setBackground(Color.RED);
-			}else{
-				jtfContrasena.setBackground(Color.GREEN);
-			}
-		}
-		
-	}
-
-	public void removeUpdate(DocumentEvent d) {
-		// TODO Auto-generated method stub
-		
-		if(d.getDocument() == jtfUsuario){
-			String contrasena;
-			contrasena = jtfUsuario.getText();
-			if(contrasena.length() < 5 || contrasena.length() > 12){
-				jtfUsuario.setBackground(Color.RED);
-			}else{
-				jtfUsuario.setBackground(Color.GREEN);
-			}
-		}else if(d.getDocument() == jtfContrasena){
-			String contrasena;
-			contrasena = jtfContrasena.getText();
-			if(contrasena.length() < 5 || contrasena.length() > 12){
-				jtfContrasena.setBackground(Color.RED);
-			}else{
-				jtfContrasena.setBackground(Color.GREEN);
-			}
-		}
-		
-	}
 	
 	@SuppressWarnings("unchecked")
 	private void agregandoClientes(String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
@@ -278,5 +232,144 @@ public class AgregarCliente extends JFrame implements ActionListener, DocumentLi
 		}catch(Exception e){ }	
 		
 	}	
+		
+	
+	private class DocumentNombre implements DocumentListener{
+
+		@Override
+		public void changedUpdate(DocumentEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent arg0) {
+			// TODO Auto-generated method stub
+			String nombre;
+			nombre = jtfNombre.getText();
+			if(nombre.length() < 3 || nombre.length() > 12){
+				jtfNombre.setBackground(Color.RED);
+			}else{
+				jtfNombre.setBackground(Color.GREEN);
+			}
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent arg0) {
+			// TODO Auto-generated method stub
+			String nombre;
+			nombre = jtfNombre.getText();
+			if(nombre.length() < 3 || nombre.length() > 12){
+				jtfNombre.setBackground(Color.RED);
+			}else{
+				jtfNombre.setBackground(Color.GREEN);
+			}
+		}
+		
+	}
+	
+	private class DocumentApellido implements DocumentListener{
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			String apellido;
+			apellido = jtfApellido.getText();
+			if(apellido.length() < 5 || apellido.length() > 12){
+				jtfApellido.setBackground(Color.RED);
+			}else{
+				jtfApellido.setBackground(Color.GREEN);
+			}
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			String apellido;
+			apellido = jtfApellido.getText();
+			if(apellido.length() < 5 || apellido.length() > 12){
+				jtfApellido.setBackground(Color.RED);
+			}else{
+				jtfApellido.setBackground(Color.GREEN);
+			}
+		}
+		
+	}
+	
+	private class DocumentContrasena implements DocumentListener{
+		private String contrasena;
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			contrasena = jtfContrasena.getText();
+			if(contrasena.length() < 8 || contrasena.length() > 18){
+				jtfContrasena.setBackground(Color.RED);
+			}else{
+				jtfContrasena.setBackground(Color.GREEN);
+			}
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			
+			contrasena = jtfContrasena.getText();
+			if(contrasena.length() < 8 || contrasena.length() > 18){
+				jtfContrasena.setBackground(Color.RED);
+			}else{
+				jtfContrasena.setBackground(Color.GREEN);
+			}
+		}
+		
+	}
+	
+	private class DocumentContraConfirmar implements DocumentListener{
+		private String contraConfirmar;
+		private String contrasena;
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			contrasena = jtfContrasena.getText();
+			contraConfirmar = jtfContrasenaConfirma.getText();
+			if(!contraConfirmar.equals(contrasena)){
+				jtfContrasenaConfirma.setBackground(Color.RED);
+			}else{
+				jtfContrasenaConfirma.setBackground(Color.GREEN);
+			}
+		}
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			// TODO Auto-generated method stub
+			contrasena = jtfContrasena.getText();
+			contraConfirmar = jtfContrasenaConfirma.getText();
+			if(!contraConfirmar.equals(contrasena)){
+				jtfContrasenaConfirma.setBackground(Color.RED);
+			}else{
+				jtfContrasenaConfirma.setBackground(Color.GREEN);
+			}
+		}
+		
+		
+	}
+	
 	
 }
