@@ -47,14 +47,15 @@ public class AgregarCliente extends JFrame implements ActionListener{
 	private int alturaPantalla = tamanoPantalla.height, anchoPantalla = tamanoPantalla.width;
 	
 	private JLabel jlNombre, jlApellido, jlUsuario, jlNumCuenta, jlSaldoInicial, jlContrasena, jlTipoCuenta, jlMensaje, jlContrasenaConfirma;
-	private JTextField jtfNombre, jtfApellido, jtfUsuario, jtfNumCuenta, jtfSaldoInicial, jtfContrasena, jtfContrasenaConfirma;
+	private JTextField jtfNombre, jtfApellido, jtfNumCuenta, jtfSaldoInicial, jtfContrasena, jtfContrasenaConfirma;
 	private JButton jbAdd, jbCancelar, jbCerrar;
 	private JPanel jpInformacion, jpDatos, jpBotones, jpBtMsj;	
 	private String nombre, apellido, usuario, contrasena, tipoCuenta;
-	private JComboBox<String> jcbTipoCuenta;
+	private JComboBox<String> jcbTipoCuenta, jcbUsuario;
 	private double saldoInicial;
 	private int numCuenta = 0;
-	ArrayList <ClientesDB> lista = new ArrayList<ClientesDB>();
+	private ArrayList <ClientesDB> lista = new ArrayList<ClientesDB>();
+	private boolean adelanteTodoCorrecto;
 	
 	public AgregarCliente() {
 		// TODO Auto-generated constructor stub
@@ -92,7 +93,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		
 		jtfNombre = new JTextField(15);
 		jtfApellido = new JTextField(15);
-		jtfUsuario = new JTextField(15);
+		jcbUsuario = new JComboBox<String>();
 		jtfNumCuenta = new JTextField(15);
 		jtfSaldoInicial = new JTextField(12);
 		jtfContrasena = new JTextField(12);
@@ -126,7 +127,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 			
 		jpDatos.add(jtfNombre);
 		jpDatos.add(jtfApellido);
-		jpDatos.add(jtfUsuario);
+		jpDatos.add(jcbUsuario);
 		jpDatos.add(jtfNumCuenta);
 		jpDatos.add(jtfSaldoInicial);
 		jpDatos.add(jtfContrasena);
@@ -148,19 +149,21 @@ public class AgregarCliente extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
+		if(adelanteTodoCorrecto){
 			if(jbAdd == e.getSource()){
 				
 				//-------Captura de los datos introducidos---------------
 				nombre = jtfNombre.getText();
 				apellido = jtfApellido.getText();
-				usuario = jtfUsuario.getText();
-				
-				apellido = jtfContrasena.getText();
+				usuario = (String) jcbUsuario.getSelectedItem();
+				contrasena = jtfContrasena.getText();
 				tipoCuenta = (String)jcbTipoCuenta.getSelectedItem();	
 				
 				//------------------Datos int y double---------------------
-				
-				saldoInicial = Double.parseDouble(jtfSaldoInicial.getText());
+				if(!(jtfSaldoInicial.getText() == null || jtfSaldoInicial.getText() == "")) 
+					saldoInicial = Double.parseDouble("0"); 
+				else
+					saldoInicial = Double.parseDouble(jtfSaldoInicial.getText());
 				//---------------------------------------------------------		
 				
 				
@@ -172,26 +175,24 @@ public class AgregarCliente extends JFrame implements ActionListener{
 				
 				jtfNombre.setEditable(false);
 				jtfApellido.setEditable(false);
-				jtfUsuario.setEditable(false);
 				jtfNumCuenta.setEditable(false);
 				jtfSaldoInicial.setEditable(false);
 				jtfContrasena.setEditable(false);
-//				System.out.println(jcbTipoCuenta.getSelectedItem());
 				jlMensaje.setHorizontalAlignment(JLabel.CENTER);
 				jlMensaje.setForeground(Color.GREEN.darker().darker().darker());
 				jpBtMsj.add(jlMensaje, BorderLayout.CENTER);
 				
 				
 				
-			}else if(jbCancelar == e.getSource() || jbCerrar == e.getSource()){
+			}
+			if(jbCancelar == e.getSource() || jbCerrar == e.getSource()){
 				dispose();
 			}
+		}
+		if(jbCancelar == e.getSource() || jbCerrar == e.getSource()){
+			dispose();
+		}
 		
-//			String indicacion = 
-//					"El Cliente "+nombre+" "+apellido+" con N° de cuenta "+numCuenta+" tipo "+tipoCuenta+
-//					" pose un Saldo Inicial de B/. "+saldoInicial+"\n con las Credenciales de acceso "+
-//					"usuario: "+usuario+" y contraseña: "+contrasena;
-//			JOptionPane.showMessageDialog(this, indicacion);
 	}	
 	
 	
@@ -233,7 +234,6 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		
 	}	
 		
-	
 	private class DocumentNombre implements DocumentListener{
 
 		@Override
@@ -245,24 +245,31 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		@Override
 		public void insertUpdate(DocumentEvent arg0) {
 			// TODO Auto-generated method stub
-			String nombre;
+			String nombre, item;
 			nombre = jtfNombre.getText();
+			item = nombre + jtfApellido.getText();
 			if(nombre.length() < 3 || nombre.length() > 12){
 				jtfNombre.setBackground(Color.RED);
+				jcbUsuario.removeItem(item);
 			}else{
 				jtfNombre.setBackground(Color.GREEN);
+				
+				jcbUsuario.addItem(item);
 			}
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent arg0) {
 			// TODO Auto-generated method stub
-			String nombre;
+			String item, nombre;
 			nombre = jtfNombre.getText();
+			item = nombre + jtfApellido.getText();
 			if(nombre.length() < 3 || nombre.length() > 12){
 				jtfNombre.setBackground(Color.RED);
+				jcbUsuario.removeItem(item);
 			}else{
 				jtfNombre.setBackground(Color.GREEN);
+				jcbUsuario.addItem(item);
 			}
 		}
 		
@@ -279,27 +286,34 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		@Override
 		public void insertUpdate(DocumentEvent e) {
 			// TODO Auto-generated method stub
-			String apellido;
+			String apellido, item;
 			apellido = jtfApellido.getText();
+			item = apellido + jtfNombre.getText();
 			if(apellido.length() < 5 || apellido.length() > 12){
 				jtfApellido.setBackground(Color.RED);
+				jcbUsuario.removeItem(item);
 			}else{
 				jtfApellido.setBackground(Color.GREEN);
+				jcbUsuario.addItem(item);
+				jcbUsuario.addItem(jtfNombre.getText()+apellido);
 			}
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			// TODO Auto-generated method stub
-			String apellido;
+			String item, apellido;
 			apellido = jtfApellido.getText();
+			item = apellido + jtfNombre.getText();
+			
 			if(apellido.length() < 5 || apellido.length() > 12){
 				jtfApellido.setBackground(Color.RED);
+				jcbUsuario.removeItem(item);
 			}else{
 				jtfApellido.setBackground(Color.GREEN);
+				jcbUsuario.addItem(item);
 			}
 		}
-		
 	}
 	
 	private class DocumentContrasena implements DocumentListener{
@@ -325,7 +339,6 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			// TODO Auto-generated method stub
-			
 			contrasena = jtfContrasena.getText();
 			if(contrasena.length() < 8 || contrasena.length() > 18){
 				jtfContrasena.setBackground(Color.RED);
@@ -354,6 +367,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 				jtfContrasenaConfirma.setBackground(Color.RED);
 			}else{
 				jtfContrasenaConfirma.setBackground(Color.GREEN);
+				adelanteTodoCorrecto = true;
 			}
 		}
 		@Override
@@ -365,11 +379,11 @@ public class AgregarCliente extends JFrame implements ActionListener{
 				jtfContrasenaConfirma.setBackground(Color.RED);
 			}else{
 				jtfContrasenaConfirma.setBackground(Color.GREEN);
+				adelanteTodoCorrecto = true;
 			}
 		}
 		
 		
 	}
-	
 	
 }
