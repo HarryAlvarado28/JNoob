@@ -59,16 +59,16 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 	private String queHago;
 	private JTextArea jtaPantallaPrincipal;
 	private JTextField jtfPantallaInferior;
-	private JMenuItem jmiSession, jmiAyuda, jmiAcerca_de;
+	private JMenuItem jmiSession, jmiAyuda, jmiAcerca_de, jmiAjustes;
 	private String nombre;
 	private String apellido;
 	private String usuario;
-	private int numCuenta;
+	private String numCuenta;
 	private String contrasena;
 	private String tipoCuenta;
 	
 	public InterfazDeUsuario(String usuario){
-		this(null,null,usuario,0,0,null,null);
+		this(null,null,usuario,"",0,null,null);
 		
 		setTitle("Bank ATM");
 //		Image miIcono = mipantalla.getImage("src/img/iconBank.png");
@@ -82,7 +82,7 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 		addMenuBarNorth(null,null,usuario);	
 	}
 	
-	public InterfazDeUsuario(String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
+	public InterfazDeUsuario(String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,
 			String contrasena, String tipoCuenta){
 		setTitle("DMG Bank");
 		
@@ -199,23 +199,26 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 		JMenu jmAyuda = new JMenu("Ayuda");
 		
 		jmiSession = new JMenuItem("Cerrar Sesión");
+		jmiAjustes = new JMenuItem("Ajustes");
 		
 		jmiAyuda = new JMenuItem("Ayuda");
 		jmiAcerca_de = new JMenuItem("Acerca de");	
 		
 		//_________limpiar el action comand______________
 		jmiSession.setActionCommand("");
+		jmiAjustes.setActionCommand("");
 		jmiAyuda.setActionCommand("");
 		jmiAcerca_de.setActionCommand("");
 		
 		//___________ponerlos a la escucha________________
 		jmiSession.addActionListener(this);
+		jmiAjustes.addActionListener(this);
 		jmiAyuda.addActionListener(this);
 		jmiAcerca_de.addActionListener(this);
 		
-		jmUsuario.add(jmiSession);
-		
-		
+		jmUsuario.add(jmiAjustes);
+		jmUsuario.addSeparator();
+		jmUsuario.add(jmiSession);		
 		
 		jmAyuda.add(jmiAyuda);
 		jmAyuda.addSeparator();
@@ -310,6 +313,10 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 			jtfPantallaNum.setBackground(Color.WHITE);
 			jtfPantallaInferior.setBackground(Color.lightGray);
 			
+		}else if(jmiAjustes == e.getSource()){
+			@SuppressWarnings("unused")
+			EditarCliente ec = new EditarCliente(usuario, true);
+			
 		}
 
 		
@@ -388,7 +395,7 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 		int index;
 //		private boolean encontrado = false;
 		
-		public EditaSaldoUsuario(String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
+		public EditaSaldoUsuario(String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,
 				String contrasena, String tipoCuenta){
 			
 			index = determinaUsuario(usuario);
@@ -428,7 +435,7 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 		}
 		
 		@SuppressWarnings("unchecked")
-		private void reemplazar(int index,String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
+		private void reemplazar(int index,String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,
 				String contrasena, String tipoCuenta){
 			try {
 				ObjectInputStream leer_fichero = new ObjectInputStream(new FileInputStream("clientesBaseDatos.txt"));

@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -53,9 +54,9 @@ public class AgregarCliente extends JFrame implements ActionListener{
 	private String nombre, apellido, usuario, contrasena, tipoCuenta;
 	private JComboBox<String> jcbTipoCuenta, jcbUsuario;
 	private double saldoInicial;
-	private int numCuenta = 0;
+	private String numCuenta;
 	private ArrayList <ClientesDB> lista = new ArrayList<ClientesDB>();
-	private boolean adelanteTodoCorrecto;
+	private boolean permitidoContrasena, permitidoNomApell;
 	
 	public AgregarCliente() {
 		// TODO Auto-generated constructor stub
@@ -66,6 +67,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		setResizable(false);
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void addInformacion(){
 		jpInformacion = new JPanel(new GridLayout(8,1));
 		jpDatos = new JPanel(new GridLayout(8,1,10,13));
@@ -104,7 +106,9 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		jtfContrasena.getDocument().addDocumentListener(new DocumentContrasena());	
 		jtfContrasenaConfirma.getDocument().addDocumentListener(new DocumentContraConfirmar());
 		
-		jtfNumCuenta.setText("Asignacion Automatica");
+		Date d = new Date();
+		jtfNumCuenta.setText(d.getYear()+"-"+d.getMonth()+d.getDay()+"-"+d.getHours()+d.getMinutes()+d.getSeconds());
+//		jtfNumCuenta.setText("Asignacion Automatica");
 		jtfNumCuenta.setHorizontalAlignment(JTextField.CENTER);
 		jtfNumCuenta.setEditable(false);
 		
@@ -149,23 +153,27 @@ public class AgregarCliente extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		if(adelanteTodoCorrecto){
+		if(permitidoContrasena & permitidoNomApell){
 			if(jbAdd == e.getSource()){
 				
 				//-------Captura de los datos introducidos---------------
 				nombre = jtfNombre.getText();
 				apellido = jtfApellido.getText();
 				usuario = (String) jcbUsuario.getSelectedItem();
+				numCuenta = jtfNumCuenta.getText();
 				contrasena = jtfContrasena.getText();
 				tipoCuenta = (String)jcbTipoCuenta.getSelectedItem();	
 				
 				//------------------Datos int y double---------------------
-				if(!(jtfSaldoInicial.getText() == null || jtfSaldoInicial.getText() == "")) 
-					saldoInicial = Double.parseDouble("0"); 
-				else
-					saldoInicial = Double.parseDouble(jtfSaldoInicial.getText());
+				try{
+					if((jtfSaldoInicial.getText() == null || jtfSaldoInicial.getText().equals(""))) 
+						saldoInicial = Double.parseDouble("0"); 
+					else
+						saldoInicial = Double.parseDouble(jtfSaldoInicial.getText());
+				}catch(Exception e1){
+					saldoInicial = Double.parseDouble("0");
+				}
 				//---------------------------------------------------------		
-				
 				
 				agregandoClientes(nombre, apellido, usuario, numCuenta, saldoInicial, contrasena, tipoCuenta);
 				
@@ -195,9 +203,8 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		
 	}	
 	
-	
 	@SuppressWarnings("unchecked")
-	private void agregandoClientes(String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
+	private void agregandoClientes(String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,
 			String contrasena, String tipoCuenta){
 		try {
 			ObjectInputStream leer_fichero = new ObjectInputStream(new FileInputStream("clientesBaseDatos.txt"));
@@ -211,17 +218,12 @@ public class AgregarCliente extends JFrame implements ActionListener{
 			personal_Recuperado.toArray(listaNueva);
 			
 			for(ClientesDB e: listaNueva){
-
-				if(numCuenta < e.getNumCuenta()){
-					numCuenta = e.getNumCuenta();
-				}
-	
 				lista.add(e);
 			}
+			
 		}catch (Exception e1) { }
 		
-		
-		lista.add(new ClientesDB(nombre, apellido, usuario, ++numCuenta, saldoInicial, contrasena, tipoCuenta));
+		lista.add(new ClientesDB(nombre, apellido, usuario, numCuenta, saldoInicial, contrasena, tipoCuenta));
 		
 		try{	
 			ObjectOutputStream escribiendo_fichero = new ObjectOutputStream(new FileOutputStream("clientesBaseDatos.txt"));
@@ -251,10 +253,11 @@ public class AgregarCliente extends JFrame implements ActionListener{
 			if(nombre.length() < 3 || nombre.length() > 12){
 				jtfNombre.setBackground(Color.RED);
 				jcbUsuario.removeItem(item);
+				permitidoNomApell = false;
 			}else{
 				jtfNombre.setBackground(Color.GREEN);
-				
 				jcbUsuario.addItem(item);
+				permitidoNomApell = true;
 			}
 		}
 
@@ -267,9 +270,11 @@ public class AgregarCliente extends JFrame implements ActionListener{
 			if(nombre.length() < 3 || nombre.length() > 12){
 				jtfNombre.setBackground(Color.RED);
 				jcbUsuario.removeItem(item);
+				permitidoNomApell = false;
 			}else{
 				jtfNombre.setBackground(Color.GREEN);
 				jcbUsuario.addItem(item);
+				permitidoNomApell = true;
 			}
 		}
 		
@@ -292,10 +297,12 @@ public class AgregarCliente extends JFrame implements ActionListener{
 			if(apellido.length() < 5 || apellido.length() > 12){
 				jtfApellido.setBackground(Color.RED);
 				jcbUsuario.removeItem(item);
+				permitidoNomApell = false;
 			}else{
 				jtfApellido.setBackground(Color.GREEN);
 				jcbUsuario.addItem(item);
 				jcbUsuario.addItem(jtfNombre.getText()+apellido);
+				permitidoNomApell = true;
 			}
 		}
 
@@ -309,9 +316,11 @@ public class AgregarCliente extends JFrame implements ActionListener{
 			if(apellido.length() < 5 || apellido.length() > 12){
 				jtfApellido.setBackground(Color.RED);
 				jcbUsuario.removeItem(item);
+				permitidoNomApell = false;
 			}else{
 				jtfApellido.setBackground(Color.GREEN);
 				jcbUsuario.addItem(item);
+				permitidoNomApell = true;
 			}
 		}
 	}
@@ -367,7 +376,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 				jtfContrasenaConfirma.setBackground(Color.RED);
 			}else{
 				jtfContrasenaConfirma.setBackground(Color.GREEN);
-				adelanteTodoCorrecto = true;
+				permitidoContrasena = true;
 			}
 		}
 		@Override
@@ -379,7 +388,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 				jtfContrasenaConfirma.setBackground(Color.RED);
 			}else{
 				jtfContrasenaConfirma.setBackground(Color.GREEN);
-				adelanteTodoCorrecto = true;
+				permitidoContrasena = true;
 			}
 		}
 		

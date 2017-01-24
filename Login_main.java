@@ -73,7 +73,7 @@ class MarcoAcceso extends JFrame implements KeyListener, ActionListener{
 	private String nombre;
 	private String apellido;
 	private String usuario;
-	private int numCuenta;
+	private String numCuenta;
 	private double saldoInicial;
 	private String contrasena;
 	private String tipoCuenta;

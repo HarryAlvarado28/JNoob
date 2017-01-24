@@ -49,7 +49,7 @@ public class EditarCliente extends JFrame implements ActionListener{
 	private String nombre, apellido, usuario, contrasena, tipoCuenta;
 	private JComboBox<String> jcbTipoCuenta;
 	private double saldoInicial;
-	private int numCuenta;
+	private String numCuenta;
 	private ArrayList <ClientesDB> lista = new ArrayList<ClientesDB>();
 	
 	private boolean encontrado = false;
@@ -60,7 +60,20 @@ public class EditarCliente extends JFrame implements ActionListener{
 		setBounds(alturaPantalla/2,anchoPantalla/4,340,310);
 //		setIconImage(miIcono);	
 		setTitle("Editar Cliente");
-		addInformacion();
+		addInformacion(false);
+		
+		index = determinaUsuario(usuarioModificar);
+		
+		setResizable(false);
+
+	}
+	
+	public EditarCliente(String usuarioModificar,boolean cliente) {
+		// TODO Auto-generated constructor stub
+		setBounds(alturaPantalla/2,anchoPantalla/4,340,310);
+//		setIconImage(miIcono);	
+		setTitle("Mi Perfil");
+		addInformacion(cliente);
 		
 		index = determinaUsuario(usuarioModificar);
 		
@@ -82,12 +95,8 @@ public class EditarCliente extends JFrame implements ActionListener{
 			ClientesDB []listaNueva = new ClientesDB[personal_Recuperado.size()];
 			
 			personal_Recuperado.toArray(listaNueva);
-//			jtfNombre.setText("setendo desde usuariModfi");
 			
-			for(ClientesDB e: listaNueva){
-//				System.out.println(e.getApellido()); //Solo para verificar 
-//				lista.add(e);
-				
+			for(ClientesDB e: listaNueva){				
 				if(e.getUsuario().equals(usuarioModificar)){
 					jtfNombre.setText(e.getNombre());
 					jtfApellido.setText(e.getApellido());
@@ -111,7 +120,7 @@ public class EditarCliente extends JFrame implements ActionListener{
 		return i;
 	}
 	
-	private void addInformacion(){
+	private void addInformacion(boolean cliente){
 		jpInformacion = new JPanel(new GridLayout(7,1));
 		jpDatos = new JPanel(new GridLayout(7,1,10,13));
 		jpBotones = new JPanel();
@@ -149,7 +158,7 @@ public class EditarCliente extends JFrame implements ActionListener{
 		//---------------------------------------------	
 							
 //		------------------------Zona de seteo--------------------
-//			int i = 0;
+
 			
 		jpInformacion.add(jlNombre);
 		jpInformacion.add(jlApellido);
@@ -167,6 +176,12 @@ public class EditarCliente extends JFrame implements ActionListener{
 		jpDatos.add(jtfContrasena);
 		jpDatos.add(jcbTipoCuenta);
 		
+		if(cliente){
+			jtfNumCuenta.setEditable(false);
+			jtfSaldoInicial.setEditable(false);
+			jcbTipoCuenta.setEditable(false);
+		}
+		
 		jpBotones.add(jbAdd);
 		jpBotones.add(jbCancelar);
 		
@@ -175,9 +190,7 @@ public class EditarCliente extends JFrame implements ActionListener{
 		add(jpBtMsj,BorderLayout.SOUTH);
 		add(jpDatos,BorderLayout.EAST);
 		add(jpInformacion, BorderLayout.WEST);
-		
-//		return i;		
-		
+				
 	}
 
 	@Override
@@ -192,7 +205,8 @@ public class EditarCliente extends JFrame implements ActionListener{
 				usuario = jtfUsuario.getText();
 
 				//------------------Datos int y double---------------------
-				numCuenta = Integer.parseInt(jtfNumCuenta.getText());
+//				numCuenta = Integer.parseInt(jtfNumCuenta.getText());
+				numCuenta = jtfNumCuenta.getText();
 				saldoInicial = Double.parseDouble(jtfSaldoInicial.getText());
 				//----------------------------------------------------------
 				contrasena = jtfContrasena.getText();
@@ -229,7 +243,7 @@ public class EditarCliente extends JFrame implements ActionListener{
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void reemplazar(int index,String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
+	private void reemplazar(int index,String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,
 			String contrasena, String tipoCuenta){
 		try {
 			ObjectInputStream leer_fichero = new ObjectInputStream(new FileInputStream("clientesBaseDatos.txt"));
