@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -76,7 +76,7 @@ public class InterfazAdministrador extends JFrame implements ActionListener{
 		JMenu jmUsuario = new JMenu("Administrador");
 		JMenu jmAyuda = new JMenu("Ayuda");
 		
-		jmiSession = new JMenuItem("Cerrar Sesión");
+		jmiSession = new JMenuItem("Cerrar Sesiï¿½n");
 		
 		jmiAyuda = new JMenuItem("Ayuda");
 		jmiAcerca_de = new JMenuItem("Acerca de");	
@@ -201,25 +201,25 @@ public class InterfazAdministrador extends JFrame implements ActionListener{
 			+ " administrador.\n"
 			+ " La sesion con lleva cuatro botones\n"
 			+ " principales:\n"
-			+ " AGREGAR CLIENTES: aqui podremos añadir un\n"
+			+ " AGREGAR CLIENTES: aqui podremos aï¿½adir un\n"
 			+ "  cliente nuevo.\n"
-			+ "	EDITAR CLIENTES: con esta opción podremos\n"
+			+ "	EDITAR CLIENTES: con esta opciï¿½n podremos\n"
 			+ "  editar un usuario/cliente ya existente.\n"
-			+ " ACTUALIZAR TABLA: esta opción nos permite\n"
+			+ " ACTUALIZAR TABLA: esta opciï¿½n nos permite\n"
 			+ "  refrescar la tabla, para poder visualizar\n"
 			+ "  los usuarios que fueron editados, eliminados\n"
 			+ "  o agregados.\n"
 			+ " ELIMINAR USUARIOS: una de las opciones mas\n"
-			+ "  delicadas de la administración es la de\n"
+			+ "  delicadas de la administraciï¿½n es la de\n"
 			+ "  poder eliminar un cliente.\n";
 	
 	private String acerca_de = "\t\t~~ DMG BANK  ~~\n\n"
-			+ " Bank DMG es un sistema bancario diseñado\n"
+			+ " Bank DMG es un sistema bancario diseï¿½ado\n"
 			+ " para transacciones de retiro, deposito y\n"
 			+ " y consulta de saldo. \n"
 			+ " En esta session de administrador podra\n"
 			+ " tener el control total de todas las\n"
 			+ " cuentas y llevar acabo su correcta\n"
-			+ " administración.";
+			+ " administraciï¿½n.";
 	
 }

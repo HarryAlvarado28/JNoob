@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -27,7 +27,6 @@ public class Login_main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
 		//MarcoBaseBankATM bankATM = new MarcoBaseBankATM();
 		//bankATM.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 //		MarcoBaseBankATM();
@@ -51,7 +50,7 @@ class MarcoAcceso extends JFrame implements KeyListener, ActionListener{
 	private JPasswordField jpfPass;
 	private JLabel jlUser, jlPass;
 	private JTextPane jtpMessage;
-	private String alet = "Credenciales no correctas. Reinténtalo.";
+	private String alet = "Credenciales no correctas. Reintï¿½ntalo.";
 	private boolean acceso;
 	
 	private Toolkit mipantalla = Toolkit.getDefaultToolkit();
@@ -73,7 +72,7 @@ class MarcoAcceso extends JFrame implements KeyListener, ActionListener{
 	private String nombre;
 	private String apellido;
 	private String usuario;
-	private int numCuenta;
+	private String numCuenta;
 	private double saldoInicial;
 	private String contrasena;
 	private String tipoCuenta;
@@ -92,7 +91,7 @@ class MarcoAcceso extends JFrame implements KeyListener, ActionListener{
 		jtfUser = new JTextField(10);
 		jtfUser.addKeyListener(this);
 		
-		jlPass = new JLabel("Contraseña");
+		jlPass = new JLabel("Contraseï¿½a");
 		jpfPass = new JPasswordField(10);
 		jpfPass.addKeyListener(this);
 		jtpMessage = new JTextPane();
@@ -248,11 +247,11 @@ class MarcoAcceso extends JFrame implements KeyListener, ActionListener{
 	
 	class LaminaConImagen extends JPanel{
 		private Image imagen;
-		URL ruta_externa = MarcoAcceso.LaminaConImagen.class.getResource("diseñoLogin5.png");
+		URL ruta_externa = MarcoAcceso.LaminaConImagen.class.getResource("diseï¿½oLogin5.png");
 
 		public LaminaConImagen(){
-//			URL ru = MarcoAcceso.class.getResource("diseñoLogin5.png");
-//			File mimagen = new File("src/img/diseñoLogin5.png");
+//			URL ru = MarcoAcceso.class.getResource("diseï¿½oLogin5.png");
+//			File mimagen = new File("src/img/diseï¿½oLogin5.png");
 			
 			try{
 				imagen = ImageIO.read(ruta_externa);

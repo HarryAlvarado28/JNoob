@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 
 import java.io.Serializable;
 
@@ -17,17 +17,17 @@ public class ClientesDB implements Serializable{
 	private static final long serialVersionUID = 28;
 	private String nombre, apellido, usuario, contrasena, tipoCuenta;
 	private double saldoInicial;
-	private int numCuenta;
+	private String numCuenta;
 	
 	public ClientesDB(String usuario, String numCuenta,
 			String contrasena, String tipoCuenta) {
 		
-		this("anonimo ","", usuario, 0,0.0,
+		this("anonimo ","", usuario, "",0.0,
 			contrasena,tipoCuenta);
 		
 	}
 
-	public ClientesDB(String nombre, String apellido, String usuario, int numCuenta, double saldoInicial,
+	public ClientesDB(String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,
 			String contrasena, String tipoCuenta) {
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -50,7 +50,7 @@ public class ClientesDB implements Serializable{
 		return usuario;
 	}
 
-	public int getNumCuenta() {
+	public String getNumCuenta() {
 		return numCuenta;
 	}
 

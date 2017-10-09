@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
