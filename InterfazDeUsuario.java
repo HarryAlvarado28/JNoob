@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -67,8 +67,8 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 	private String contrasena;
 	private String tipoCuenta;
 	
-	public InterfazDeUsuario(String usuario){
-		this(null,null,usuario,"",0,null,null);
+	public InterfazDeUsuario(ClientesDB u){
+		this(null,null,u.getUsuario(),"",0,null,null);
 		
 		setTitle("Bank ATM");
 //		Image miIcono = mipantalla.getImage("src/img/iconBank.png");
@@ -198,7 +198,7 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 		JMenu jmUsuario = new JMenu(usuario);
 		JMenu jmAyuda = new JMenu("Ayuda");
 		
-		jmiSession = new JMenuItem("Cerrar Sesión");
+		jmiSession = new JMenuItem("Cerrar Sesiï¿½n");
 		jmiAjustes = new JMenuItem("Ajustes");
 		
 		jmiAyuda = new JMenuItem("Ayuda");
@@ -301,7 +301,7 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 			new EditaSaldoUsuario(nombre, apellido, usuario, numCuenta, saldoEnBanco,
 					 contrasena, tipoCuenta);
 			this.dispose();
-			Login_main.main(null);
+			LoginMainTest.main(null);
 			
 		}else if(jmiAyuda == e.getSource()){
 			jtaPantallaPrincipal.setText(ayuda + ayuda1 + ayuda2);
@@ -322,30 +322,30 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 		
 	}
 	
-	private String ayuda = "\t Yo te Ayudo!!.. :)\n\n  	Esta herramienta esta diseñada para\n"
+	private String ayuda = "\t Yo te Ayudo!!.. :)\n\n  	Esta herramienta esta diseï¿½ada para\n"
 			     + " un facil y sensillo uso, en tan solos unos\n"
 			     + " pasos podras haber hecho tu retiro o\n"
 			     + " deposito y podras consultar tu saldo actual\n"
 			     + " en la banca.",
-		ayuda1 = "\n\n BALANCE DE CUENTA : esta opción te permite\n"
+		ayuda1 = "\n\n BALANCE DE CUENTA : esta opciï¿½n te permite\n"
 				 + " consultar el saldo Actual."
-				 + "\n\n HACER DEPOSITO : esta opción permite \n"
+				 + "\n\n HACER DEPOSITO : esta opciï¿½n permite \n"
 				 + " depositar el saldo que desees a tu cuenta \n"
 				 + " Bancaria."
-				 + "\n\n HACER RETIRO : esta opción te permite \n"
+				 + "\n\n HACER RETIRO : esta opciï¿½n te permite \n"
 				 + " hacer un retiro, no mas que tu saldo \n"
 				 + " bancario.",
 		ayuda2 = "\n\n\t **Al Digitar Saldo** \n"
 				 + " Al digitar saldo deber tener en cuenta que\n"
 				 + " no podras utilizar coma (,) si no solo un\n"
 				 + " punto (.) para representar el valor centimo\n"
-				 + " de tu transacción; de la siguiente manera:\n"
+				 + " de tu transacciï¿½n; de la siguiente manera:\n"
 				 + "   >   280.14  \n"
 				 + "   >  3957.95  \n"
 				 + "   >    61.04  \n";
 	
 	private String acerca_de = "\n\n\t\t~~ DMG BANK  ~~\n\n"
-			+ " Bank DMG es un sistema bancario diseñado\n"
+			+ " Bank DMG es un sistema bancario diseï¿½ado\n"
 			+ " para transacciones de retiro, deposito y\n"
 			+ " y consulta de saldo. ";	
 	

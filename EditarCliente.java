@@ -1,5 +1,5 @@
 
-package BankDMGv1;
+package bank;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -141,7 +141,7 @@ public class EditarCliente extends JFrame implements ActionListener{
 		jlUsuario = new JLabel(" Usuario: ");
 		jlNumCuenta = new JLabel(" Numero de Cuenta: ");
 		jlSaldoInicial = new JLabel(" Saldo Inicial: ");
-		jlContrasena = new JLabel(" Contraseña: ");
+		jlContrasena = new JLabel(" Contraseï¿½a: ");
 		jlTipoCuenta = new JLabel(" Tipo Cuenta: ");
 		
 		jtfNombre = new JTextField(15);
@@ -236,9 +236,9 @@ public class EditarCliente extends JFrame implements ActionListener{
 			}
 		
 //			String indicacion = 
-//					"El Cliente "+nombre+" "+apellido+" con N° de cuenta "+numCuenta+" tipo "+tipoCuenta+
+//					"El Cliente "+nombre+" "+apellido+" con Nï¿½ de cuenta "+numCuenta+" tipo "+tipoCuenta+
 //					" pose un Saldo Inicial de B/. "+saldoInicial+"\n con las Credenciales de acceso "+
-//					"usuario: "+usuario+" y contraseña: "+contrasena;
+//					"usuario: "+usuario+" y contraseï¿½a: "+contrasena;
 //			JOptionPane.showMessageDialog(this, indicacion);
 	}
 	

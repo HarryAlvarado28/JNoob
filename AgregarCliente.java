@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -89,7 +89,7 @@ public class AgregarCliente extends JFrame implements ActionListener{
 		jlUsuario = new JLabel(" Usuario: ");
 		jlNumCuenta = new JLabel(" Numero de Cuenta: ");
 		jlSaldoInicial = new JLabel(" Saldo Inicial: ");
-		jlContrasena = new JLabel(" Contraseña: ");
+		jlContrasena = new JLabel(" Contraseï¿½a: ");
 		jlContrasenaConfirma = new JLabel(" Confirmar Contr.");
 		jlTipoCuenta = new JLabel(" Tipo Cuenta: ");
 		

@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 
 import java.io.Serializable;
 
@@ -19,12 +19,14 @@ public class ClientesDB implements Serializable{
 	private double saldoInicial;
 	private String numCuenta;
 	
+	public ClientesDB() {
+		
+	}
 	public ClientesDB(String usuario, String numCuenta,
 			String contrasena, String tipoCuenta) {
 		
 		this("anonimo ","", usuario, "",0.0,
-			contrasena,tipoCuenta);
-		
+			contrasena,tipoCuenta);	
 	}
 
 	public ClientesDB(String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,

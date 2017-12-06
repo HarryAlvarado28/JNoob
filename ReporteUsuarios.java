@@ -1,4 +1,4 @@
-package BankDMGv1;
+package bank;
 
 import java.awt.BorderLayout;
 import java.io.FileInputStream;
@@ -51,7 +51,7 @@ public class ReporteUsuarios extends JPanel{
 		JTable jtDatos = null;// = new JTable(9,6);
 
 		JScrollPane datos = null;//= new JScrollPane(jtDatos);	
-		String[] titulo = {"Nombre","Apellido","Usuario","N° Cuenta","Saldo","Contraseña","Tipo Cuenta"};
+		String[] titulo = {"Nombre","Apellido","Usuario","Nï¿½ Cuenta","Saldo","Contraseï¿½a","Tipo Cuenta"};
 		
 		//------------recolectando datos---------------
 		Object[][] tbBidimencional = null;
