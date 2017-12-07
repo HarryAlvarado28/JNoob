@@ -18,15 +18,23 @@ public class ClientesDB implements Serializable{
 	private String nombre, apellido, usuario, contrasena, tipoCuenta;
 	private double saldoInicial;
 	private String numCuenta;
+	private static int accesoPermitido;
 	
 	public ClientesDB() {
-		
+		this(null,null,(byte) -2);
+		this.accesoPermitido = -2;
 	}
-	public ClientesDB(String usuario, String numCuenta,
-			String contrasena, String tipoCuenta) {
-		
-		this("anonimo ","", usuario, "",0.0,
-			contrasena,tipoCuenta);	
+	
+	public ClientesDB(String usuario, String password, int conectado) {
+		this(null,null, usuario, null,0.0,password,null);
+		accesoPermitido = conectado;
+	}
+	
+	public ClientesDB(String nombre, String apellido, String usuario,
+			String contrasena, String tipoCuenta, int conectado) {
+		this(nombre,apellido, usuario, null,0.0,
+			contrasena,tipoCuenta);
+		accesoPermitido = conectado;
 	}
 
 	public ClientesDB(String nombre, String apellido, String usuario, String numCuenta, double saldoInicial,
@@ -38,6 +46,11 @@ public class ClientesDB implements Serializable{
 		this.saldoInicial = saldoInicial;
 		this.contrasena = contrasena;
 		this.tipoCuenta = tipoCuenta;
+	}
+
+	
+	public int getAccesoPermitido() {
+		return accesoPermitido;
 	}
 	
 	public String getNombre() {

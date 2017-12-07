@@ -80,15 +80,13 @@ class MarcoAccesoNewVersion extends JFrame implements KeyListener, ActionListene
 	private double saldoInicial;
 	private String contrasena;
 	private String tipoCuenta;
-	private Thread thCheckLogin, thCheckConnection;
-	private ClientesDB dataUser;
-
+	private Thread thCheckLogin;
 	//---------------------------------------------------------
 	private Socket sConnectToServerBank;
 	private ServerSocket yo;
 	private Socket sAcceptConection;
-	static private byte accesoPermitido = -1;
-	private String dataLogin;
+	static private int accesoPermitido = -1;
+	private ClientesDB dataLogin;
 	//---------------------------------------------------------
 	public MarcoAccesoNewVersion(String title){
 		setTitle(title);
@@ -138,7 +136,7 @@ class MarcoAccesoNewVersion extends JFrame implements KeyListener, ActionListene
 
 	private boolean checkUser(){
 		if(!thCheckLogin.isAlive()) {
-			System.out.println("Correr nuevamnte el HILO");
+			System.out.println("Correr nuevamente el HILO");
 			thCheckLogin = new Thread(this);
 			thCheckLogin.start();
 		}
@@ -147,35 +145,31 @@ class MarcoAccesoNewVersion extends JFrame implements KeyListener, ActionListene
 		String user = jtfUser.getText();
 		char[] pass = jpfPass.getPassword();
 		String passConv = new String(pass);
-		dataLogin = user+":"+passConv;
-		
-		
-		
-		
+		dataLogin = new ClientesDB(user,passConv, -1);
 		
 		try {
 			//1. Conectando al servidor para enviar enviar datos de login
-			sConnectToServerBank = new Socket(ipServer,2828);
+			sConnectToServerBank = new Socket(ipServer,2800);
 			
-			DataOutputStream dosEnvioLogin = new DataOutputStream(sConnectToServerBank.getOutputStream());
-			System.out.println("despues del DataOutputStream----> "+ dataLogin);
-			dosEnvioLogin.writeUTF(dataLogin);
+			ObjectOutputStream dosEnvioLogin = new ObjectOutputStream(sConnectToServerBank.getOutputStream());
+			System.out.println("ObjectOutputStream[dataLogin.getUsuario()]----> "+ dataLogin.getUsuario());
+			//dosEnvioLogin.writeUTF(dataLogin);
+			dosEnvioLogin.writeObject(dataLogin);
 			
 			dosEnvioLogin.close();
 			sConnectToServerBank.close();
-
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			JOptionPane.showMessageDialog(this, "Existe un inconveniente al conectarse al Servidor");
 			e.printStackTrace();
 		}
 		try {
-			Thread.sleep(800);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 		if(accesoPermitido == 0){
 			checkU = true;
@@ -187,7 +181,7 @@ class MarcoAccesoNewVersion extends JFrame implements KeyListener, ActionListene
 			checkU = true;
 			admin = 1;
 		}
-		
+		System.out.println("accesoPermitido--> "+accesoPermitido);
 		if(checkU){
 			add(jtpMessage).setBounds(60, 140, 130, 10);
 			jtpMessage.setText(null);
@@ -205,6 +199,7 @@ class MarcoAccesoNewVersion extends JFrame implements KeyListener, ActionListene
 			jtpMessage.setForeground(Color.RED.brighter());
 			add(jbEnter).setBounds(75, 200, 100, 40);
 		}
+		System.out.println("checkU-->> "+checkU);
 		return checkU;
 		
 	}
@@ -219,14 +214,13 @@ class MarcoAccesoNewVersion extends JFrame implements KeyListener, ActionListene
 				this.dispose();
 				GUI_Administrador = new InterfazAdministrador();
 				GUI_Administrador.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
 				GUI_Administrador.setVisible(true);
+				
 			}else if(acceso){
 				this.dispose();
-				
-				GUI_Cliente = new InterfazDeUsuario<Object>(nombre,apellido,usuario,numCuenta,saldoInicial,contrasena,tipoCuenta);
+				GUI_Cliente = new InterfazDeUsuario<>(dataLogin);
+				//GUI_Cliente = new InterfazDeUsuario<Object>(nombre,apellido,usuario,numCuenta,saldoInicial,contrasena,tipoCuenta);
 				GUI_Cliente.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
 				GUI_Cliente.setVisible(true);
 			}
 		}
@@ -269,70 +263,35 @@ class MarcoAccesoNewVersion extends JFrame implements KeyListener, ActionListene
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println("Hilo Primario thCheckLogin en Ejecucion");
-			//1. Conectando al servidor para enviar enviar datos de login
-			yo = new ServerSocket(7070);
-			sAcceptConection = yo.accept();
+			while(true) {
+				System.out.println("Hilo Primario thCheckLogin en Ejecucion");
+				//1. Conectando al servidor para enviar enviar datos de login
+				yo = new ServerSocket(2801);
+				sAcceptConection = yo.accept();
+				
+				//ObjectInputStream oisRecibiendo = new ObjectInputStream(sAcceptConection.getInputStream());
+				
+				//dataUser = (ClientesDB) oisRecibiendo.readObject(); 
+				
+				DataInputStream disRespServer = new DataInputStream(sAcceptConection.getInputStream());
+				
+				accesoPermitido = disRespServer.readInt();
+				
+				//System.out.println("disRespServer.readInt()--> "+disRespServer.readInt());
+				
+				disRespServer.close();
+				sAcceptConection.close();
+				yo.close();
+			}
 			
-			//2. Recibir respuesta del servidor
-			System.out.println("antes de enviar accesoPermitido--> "+ accesoPermitido);
-			DataInputStream disRecibiendo = new DataInputStream(sAcceptConection.getInputStream());
-			
-			accesoPermitido = disRecibiendo.readByte();
-			System.out.println("accesoPermitido--> "+ accesoPermitido);
-			
-			disRecibiendo.close();
-			
-			ObjectInputStream oisRecibiendo = new ObjectInputStream(sAcceptConection.getInputStream());
-			
-			dataUser = (ClientesDB) oisRecibiendo.readObject(); 
-			
-			nombre = dataUser.getNombre();
-			apellido = dataUser.getApellido();
-			usuario = dataUser.getUsuario();
-			numCuenta = dataUser.getNumCuenta();
-			saldoInicial = dataUser.getSaldoInicial();
-			tipoCuenta = dataUser.getTipoCuenta();
-			
-			oisRecibiendo.close();
-			
-			sAcceptConection.close();
-			yo.close();
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println("error");
 			e.printStackTrace();
 		}
 		
 		
 	}
-
-/*
-class ValidConection implements Runnable{
-//	Socket sConnectionToServerBank;
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		while(true){
-			try {
-				//sConnectToServerBank = new Socket(ipServer,28000);
-				
-				
-				
-				
-				
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-}
-	
-	*/
 
 
 }

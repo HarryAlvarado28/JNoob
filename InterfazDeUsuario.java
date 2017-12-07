@@ -66,17 +66,14 @@ public class InterfazDeUsuario<Reloj> extends JFrame implements ActionListener{
 	private String numCuenta;
 	private String contrasena;
 	private String tipoCuenta;
+	private ClientesDB dataUser;
 	
 	public InterfazDeUsuario(ClientesDB u){
 		this(null,null,u.getUsuario(),"",0,null,null);
-		
+		dataUser = new ClientesDB();
+		dataUser = u;
 		setTitle("Bank ATM");
-//		Image miIcono = mipantalla.getImage("src/img/iconBank.png");
-//		URL ruta_externa = MarcoAcceso.class.getResource("iconBank.png");
-//		Image miIcono = mipantalla.getImage(ruta_externa);
-//		setIconImage(miIcono);
-		setBounds(alturaPantalla/3,anchoPantalla/4,650,300);
-		//setBounds(300,150,650,300);			
+		setBounds(alturaPantalla/3,anchoPantalla/4,650,300);		
 		addBotonesWest();
 		addPantallaCenter();
 		addMenuBarNorth(null,null,usuario);	

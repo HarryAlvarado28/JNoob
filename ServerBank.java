@@ -1,8 +1,7 @@
 package bank;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -12,11 +11,10 @@ public class ServerBank implements Runnable{
 	public static void main(String[] args) {
 		new ServerBank("Servidor");
 	}
-
+	private int acceso;
 	private ServerSocket serverS_SC;
 	private Thread Thread_Principal;
 	private Socket sConnectToClientBank;
-	private byte bAccessClient;
 	private String ipClient;
 	
 	public ServerBank(String title){
@@ -35,77 +33,80 @@ public class ServerBank implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			while(true){
+			while(true) {
 				//1.-Seridor a la escucha para al, validacion del login
-				System.out.println("while-true");
-				serverS_SC = new ServerSocket(2828);
+				System.out.println("Bucle--->>while(true)");
+				serverS_SC = new ServerSocket(2800);
 				Socket socket_SC = serverS_SC.accept();
 				ipClient = socket_SC.getInetAddress().getHostAddress();
 				
-				DataInputStream disRecibiendo = new DataInputStream(socket_SC.getInputStream());
+				ObjectInputStream disRecibiendo = new ObjectInputStream(socket_SC.getInputStream());
+				acceso = validarAccesoUsuario((ClientesDB) disRecibiendo.readObject());
 				
-				bAccessClient = userAdmin(disRecibiendo.readUTF());
 				System.out.println("ipClient --> "+ipClient);
-				System.out.println("bAccessClient --> "+bAccessClient);
 				
 				disRecibiendo.close();
 				socket_SC.close();
 				serverS_SC.close();
 				
-				//2.Respuesta para el cliente
-//				if(bAccessClient != 0) {
+				// 2.Respuesta para el Cliente
 				try {
-					sConnectToClientBank = new Socket(ipClient, 7070);
+					sConnectToClientBank = new Socket(ipClient, 2801);
 					
-					DataOutputStream dosRespForClient = new DataOutputStream(sConnectToClientBank.getOutputStream());
-					System.out.println(bAccessClient);
-					dosRespForClient.writeByte(bAccessClient);
-					
-					dosRespForClient.close();
+					DataOutputStream dosRespForClient1 = new DataOutputStream(sConnectToClientBank.getOutputStream());
+					System.out.println("acceso--> "+acceso);
+					dosRespForClient1.writeInt(acceso);
+		
+					dosRespForClient1.close();
 					sConnectToClientBank.close();
 				} catch (Exception e) {
 					// TODO: handle exception
-				}
-//				}
-			}    
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
-		
-	}
-
-	
-	private byte userAdmin(String acceptLogin) {
-		System.out.println("Data Login user: "+acceptLogin);
-		System.out.println("sub::: "+acceptLogin.substring(0, 5));
-		if(acceptLogin.substring(0, 5).equalsIgnoreCase("harry")) {
-			return 0;
-		}else {
-			return 1;
-		}
-		
-		/*
-		if(user.equals("admin") && pass.equals("keyadmin")){
-			checkU = true;
-			admin = 1;
-			
-		}else{
-			for(int i = 0;i < listaNueva.length; i++){
-				if(user.equals(listaNueva[i].getUsuario()) && passConv.equals(listaNueva[i].getContrasena())){
-					usuario = listaNueva[i].getUsuario();
-					contrasena = listaNueva[i].getContrasena();
-					
-					checkU = true;
-					break;
-				}else{
-					checkU = false;
+					e.printStackTrace();
 				}
 			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
-		*/
+		
 	}
+	
+	
+	ClientesDB u [] = new ClientesDB[5];
+	
+	private int validarAccesoUsuario(ClientesDB acceptLogin) {
+		System.out.println("Data Login user: " + acceptLogin);
+		
+		System.out.println("User-->>::: " + acceptLogin.getUsuario());
+		System.out.println("Pass-->>::: " + acceptLogin.getContrasena());
+		
+		u[0] = new ClientesDB("harry","1234",0);
+		u[1] = new ClientesDB("User3","1234",0);
+		u[2] = new ClientesDB("User4","1234",0);
+		u[3] = new ClientesDB("User5","1234",0);
+		u[4] = new ClientesDB("User6","1234",0);
+		
+		for (int i = 0; i < u.length; i++) {
+			if(
+					u[i].getUsuario().equalsIgnoreCase(acceptLogin.getUsuario())
+				&&
+					u[i].getContrasena().equalsIgnoreCase(acceptLogin.getContrasena())
+				) {
+					//dataUser_Svr = u[i];
+					System.out.println("¡¡¡¡Fine!!!");
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return 0;
+			}
+		}
+		System.out.println("No Fine");
+		return 1;
+	}
+	
+	
+	 
 }
