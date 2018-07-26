@@ -1,5 +1,4 @@
 
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -179,8 +178,7 @@ public class ServidorChat extends JFrame implements Runnable, ActionListener{
 				
 				socket_SC.close();
 				serverS_SC.close();
-			}    
-			
+			}    	
 			
 		} catch (IOException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -197,5 +195,4 @@ public class ServidorChat extends JFrame implements Runnable, ActionListener{
 		jtfPort.setText(""+serverS_SC.getLocalPort());
 		
 	}
-
 }
