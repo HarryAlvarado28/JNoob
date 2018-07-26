@@ -9,3 +9,6 @@ El app chat es para que los usuarios puedan comunicarse.
 * Primero tienes que ejecutar el ServidorChat.
 * Luego en el código del Chat se debe configurar la IP en la maquina u ordenador donde fue ejecutado.
 * Ejecutar Chat (1xPC).
+
+## Logica Formal
+Este algoritmo simula los teoremos que se utilizan en la logica formal.
